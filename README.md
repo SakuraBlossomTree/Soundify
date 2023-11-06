@@ -21,3 +21,13 @@ An Open Source Spotify Client made in React Native which utilises Piped API to g
 #### Developer
 
 I am SakuraBlossomTree the sole developer of this project 
+
+#### Bugs
+
+1. If you want to play another song you have to first kill the app then play the song, if you fail to do this then the app will run in the background even after you kill the app
+
+2. The Shit Local Audio Player doesn't work
+
+3. And you have to search the song and press the button it will automatically take you to the Audio Player if you maunally go to the audio player then the app will crash
+
+4. While the Song is repeated then the progress bar doesn't update

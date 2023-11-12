@@ -8,7 +8,11 @@ An Open Source Spotify Client made in React Native which utilises Piped API to g
 
 <img src="./screenshots/Screenshot_20231106-093740.png" alt="Screenshot 1" />
 
-<img src="./screenshots/Screenshot_20231106-093745.png" alt="Screenshot 2" />
+<!-- <img src="./screenshots/Screenshot_20231106-093745.png" alt="Screenshot 2" /> -->
+
+<img src="./screenshots/Screenshot_20231112-143705.png" alt="Screenshot 2" />
+
+<img src="./screenshots/Screenshot_20231112-143711.png" alt="Screenshot 3" />
 
 ### Installation guide
 
@@ -32,4 +36,8 @@ I am SakuraBlossomTree the sole developer of this project
 
 4. While the Song is repeated then the progress bar doesn't update
 
-#### Even more updates coming soon
+#### Updates
+
+1. Added a Dropdown menu in the Settings menu (finally Settings is now useful)
+
+2. Changed UI alignments of the Stream Audio Player there looked to weird

@@ -2,11 +2,11 @@ Great to hear that you can play music with the Piped API! Here are some suggesti
 
 3. Audio Controls: Add more audio control features like repeat, shuffle, and seeking within tracks. These enhance the user's music playback experience.
 
-4. Offline Mode: Implement a feature that allows users to download tracks for offline listening. This is particularly useful for mobile apps.
+<!-- 4. Offline Mode: Implement a feature that allows users to download tracks for offline listening. This is particularly useful for mobile apps. -->
 
-6. Search and Discovery: Enhance the search functionality by providing recommendations, trending tracks, and similar artist suggestions.
+<!-- 6. Search and Discovery: Enhance the search functionality by providing recommendations, trending tracks, and similar artist suggestions. -->
 
-7. Integrate API*: If you haven't already, consider integrating other APIs like Last.fm for artist information, Spotify API for playlists, or Lyrics API for displaying song lyrics.
+<!-- 7. Integrate API*: If you haven't already, consider integrating other APIs like Last.fm for artist information, Spotify API for playlists, or Lyrics API for displaying song lyrics. -->
 
 8. Enhance UI/UX: Improve the user interface and user experience of your app. Make sure it's easy to navigate and visually appealing.
 

@@ -1,7 +1,7 @@
 import { useState , useEffect }from "react";
 import { PipedVideoId } from "./PipedVideoId";
 
-export const Streamdata = (search) => {
+export const Streamdata = (search , value) => {
 
     const [songurl , setSongurl] = useState("8.8");
 
@@ -18,6 +18,49 @@ export const Streamdata = (search) => {
     // const songUrl = "https://piped.video/results?search_query=" + search
     
     // const url = `https://pipedapi.kavin.rocks/search?q=${search}&ffilter-all`;
+    const pipedyt = "https://api.piped.yt"
+
+    const garudalinuxpiped = "https://piped-api.garudalinux.org"
+
+    const osphostpiped = "https://pipedapi.osphost.fi"
+
+    const plutopiped = "https://api.watch.pluto.lat"
+
+    const mhapiped = "https://api-piped.mha.fi"
+
+    const kavinrockspiped = "https://pipedapi-libre.kavin.rocks"
+
+    if (value === "piped.yt"){
+
+        selectedurl = pipedyt
+
+    }
+
+    else if (value === "garudalinux.org"){
+
+        selectedurl = garudalinuxpiped
+
+    }
+    else if (value === "osphost.fi"){
+
+        selectedurl = osphostpiped
+
+    }
+    else if (value === "pluto.lat"){
+
+        selectedurl = plutopiped
+
+    }
+    else if (value === "mha.fi"){
+
+        selectedurl = mhapiped
+
+    }
+    else if (value === "libre.kavin.rocks"){
+
+        selectedurl = kavinrockspiped
+
+    }
 
     const fetchsongdata = async () => {
 
@@ -27,21 +70,9 @@ export const Streamdata = (search) => {
 
             console.log(search);
 
-            // const url = `https://pipedapi.in.projectsegfau.lt/search?q=${newsearch}&filter=all`;
+            const url = /* "https://pipedapi-libre.kavin.rocks"  */selectedurl + `/search?q=${newsearch}&filter=all`;
 
-            // const url = `https://pipedapi-libre.kavin.rocks/search?q=${newsearch}&filter=all`;
-
-            // const url = `https://pipedapi.kavin.rocks/search?q=${newsearch}&filter=all`;
-
-            // const url = `https://api-piped.mha.fi/search?q=${newsearch}&filter=all`;
-
-            // const url = `https://api.watch.pluto.lat/search?q=${newsearch}&filter=all`;
-
-            // const url = `https://pipedapi.osphost.fi/search?q=${newsearch}&filter=all`; 
-
-            // const url = `https://piped-api.garudalinux.org/search?q=${newsearch}&filter=all`;
-
-            const url = `https://api.piped.yt/search?q=${newsearch}&filter=all`;
+            console.log(url);
 
             const response = await fetch(url);
 
@@ -59,7 +90,7 @@ export const Streamdata = (search) => {
 
             console.log(videoid);
 
-            const streams = `https://api.piped.yt/streams/${videoid}`;
+            const streams =/*  "https://pipedapi-libre.kavin.rocks"  */ selectedurl + `/streams/${videoid}`;
 
             const responsestream = await fetch(streams);
             

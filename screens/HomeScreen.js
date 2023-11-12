@@ -1,13 +1,16 @@
 import React , { useState }from "react";
 import { View , TextInput , Button, StyleSheet } from "react-native";
+import { useTheme } from "react-native-paper";
 
 const HomeScreen = ({ navigation }) => {
 
     const [search, setSearch] = useState('8.8');
 
+    const theme = useTheme();
+
     return (
 
-            <View style={{ flex: 1 , alignItems: 'center' , justifyContent: 'flex-start'}}>
+            <View style={{ flex: 1 , alignItems: 'center' }}>
 
                 <TextInput 
                     style={styles.textcolor}

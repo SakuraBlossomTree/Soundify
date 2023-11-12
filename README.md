@@ -4,6 +4,8 @@ An Open Source Spotify Client made in React Native which utilises Piped API to g
 
 #### This App is still in the making and is not yet finished if you experience any bugs or such please let me know by opening a issue
 
+#### You have to select an instance first in the Settings menu then the Music will start being used
+
 #### The list of bugs will be in the bugs section
 
 <img src="./screenshots/Screenshot_20231106-093740.png" alt="Screenshot 1" />

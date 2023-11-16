@@ -22,6 +22,8 @@ const Settings = () => {
         { label: 'lunar.icu', value: 'lunar.icu'},
         { label: 'palveluntarjoaja.eu', value: 'palveluntarjoaja.eu'},
         { label: 'projectsegfau.lt-in', value: 'projectsegfau.lt-in'},
+        { label: 'r4fo.com', value: 'r4fo.com'},
+        { label: 'kavin.rocks', value: 'kavin.rocks'}
     ]);
     
     const { songurl, stream, artist_name, artwork, song_name, isLoading } = Streamdata(value , value);

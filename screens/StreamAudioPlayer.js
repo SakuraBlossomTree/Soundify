@@ -3,57 +3,8 @@ import { View , Text , Button , ActivityIndicator, StyleSheet } from 'react-nati
 import Silder from '@react-native-community/slider';
 import { Streamdata } from "../hooks/Streamdata";
 import TrackPlayer , { useProgress , RepeatMode } from "react-native-track-player";
+import { skipToNext, skipToPrevious } from "react-native-track-player/lib/trackPlayer";
 // import SoundPlayer from 'react-native-sound-player';
-
-const addTrack = async (audioUrl , songname , artwork  , artistname) => {
-
-    await TrackPlayer.add({
-    
-        id: '1',
-    
-        url: audioUrl,
-    
-        title: songname,
-    
-        artist: artistname,
- 
-        artwork: artwork,
-
-    });
-
-}
-
-const playAudio = async () => {
-    
-    await TrackPlayer.play();
-    
-};
-
-const pauseAudio = async () => {
-
-    await TrackPlayer.pause();
-
-}
-
-const stopAudio = async () => {
-
-    await TrackPlayer.reset();
-
-    await TrackPlayer.remove(1);
-
-}
-
-const toggleRepeatMode = async () => {
-
-    await TrackPlayer.setRepeatMode(RepeatMode.Track);
-
-}
-
-const getRepeatMode = async () => {
-
-    console.log(await TrackPlayer.getRepeatMode());
-
-}
 
 const StreamAudioPlayer = ({ route }) => {
     
@@ -61,11 +12,19 @@ const StreamAudioPlayer = ({ route }) => {
     
     // const pipedSearchUrl = `https://youtube.com/results?search_query=${search}`;
    
+    const [repeatMode , setRepeatMode] = useState(false);
+
+    const [queue, setQueue] = useState([]);
+
+    const [currentId , setCurrentId] = useState(1);
+
+    const [printrepeatmode , setPrintRepeatMode] = useState("OFF");
+    
     const streamDataResult = Streamdata(search);
-   
+
     const { position, buffered, duration } = useProgress();
 
-    const [seekPosition , setSeekPosition] = useState(1);
+    const [seekPosition , setSeekPosition] = useState(0);
 
     // const playaudio = () => {
     //
@@ -79,6 +38,101 @@ const StreamAudioPlayer = ({ route }) => {
     //         console.log(`cannot play the sound file`, e)
     // 
     //     }
+
+    const addTrack = async (audioUrl , songname , artwork  , artistname) => {
+
+        const newId = currentId + 1;
+
+        await TrackPlayer.add({
+        
+            id: newId.toString(),
+        
+            url: audioUrl,
+        
+            title: songname,
+        
+            artist: artistname,
+     
+            artwork: artwork,
+
+        });
+
+        setQueue([...queue, { id: newId, title: songname, artist: artistname, artwork: artwork }]);
+
+        setCurrentId(newId);
+
+    }
+
+    const playAudio = async () => {
+        
+        await TrackPlayer.play();
+        
+    };
+
+    const pauseAudio = async () => {
+
+        await TrackPlayer.pause();
+
+    }
+
+    const stopAudio = async () => {
+
+        await TrackPlayer.reset();
+
+        await TrackPlayer.remove(1);
+
+    }
+
+    const toggleRepeatMode = async () => {
+
+        let newprintrepeatmode;
+       
+        if (!repeatMode){
+
+            newprintrepeatmode = "ON"
+            
+            await TrackPlayer.setRepeatMode(RepeatMode.Track);
+
+            setRepeatMode(true);
+
+        }
+        else{
+
+            newprintrepeatmode = "OFF"
+
+            await TrackPlayer.setRepeatMode(RepeatMode.Off);
+
+            setRepeatMode(false);
+
+        }
+
+        setPrintRepeatMode(newprintrepeatmode);
+
+    }
+
+    const getRepeatMode = async () => {
+
+        console.log(await TrackPlayer.getRepeatMode());
+
+    }
+
+    const skipNext = async () => {
+
+        await TrackPlayer.skipToNext();
+
+    }
+
+    const skipPrev = async () => {
+
+        await TrackPlayer.skipToPrevious();
+
+    }
+
+    const getActiveQueue = async () => {
+
+        await TrackPlayer.getQueue();
+
+    }
 
     return (
        
@@ -111,6 +165,8 @@ const StreamAudioPlayer = ({ route }) => {
 
 
                     />
+
+                    <Text style={{ color: "#000000" }}>Repeat Mode: {printrepeatmode}</Text>
                     
                     <View style={styles.container}>
 
@@ -161,6 +217,28 @@ const StreamAudioPlayer = ({ route }) => {
                         
                         />
 
+                        <Button 
+                            
+                            onPress={() => skipNext()}
+                            title="Skip to Next"
+
+                        />
+
+                        <Button 
+                            
+                            onPress={() => skipPrev()}
+                            title="Skip to Previous"
+
+                        />
+
+                        <Button 
+                            
+                            onPress={() => getActiveQueue()}
+                            title="Print Queue"
+
+                        />
+                        
+
                     </View>
 
                     
@@ -180,7 +258,7 @@ const styles = StyleSheet.create({
 
     container: {
 
-        flex:0.3,
+        flex:0.7,
         justifyContent: 'space-evenly'
 
     },

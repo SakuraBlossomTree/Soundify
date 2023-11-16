@@ -28,7 +28,7 @@ export const Streamdata = (search , value) => {
 
     const mhapiped = "https://api-piped.mha.fi"
 
-    const kavinrockspiped = "https://pipedapi-libre.kavin.rocks"
+    const kavinrockspipedlibre = "https://pipedapi-libre.kavin.rocks"
 
     const gameytpiped = "https://piped-api.game.yt"
 
@@ -37,6 +37,10 @@ export const Streamdata = (search , value) => {
     const palvepiped = "https://pipedapi.palveluntarjoaja.eu"
 
     const projectinpiped = "https://pipedapi.in.projectsegfau.lt"
+
+    const rf4opiped = "https://pipedapi.r4fo.com"
+
+    const kavinrockspiped = "https://pipedapi.kavin.rocks"
 
     if (value === "piped.yt"){
 
@@ -66,7 +70,7 @@ export const Streamdata = (search , value) => {
     }
     else if (value === "libre.kavin.rocks"){
 
-        selectedurl = kavinrockspiped
+        selectedurl = kavinrockspipedlibre
 
     }
 
@@ -94,6 +98,26 @@ export const Streamdata = (search , value) => {
 
     }
 
+    else if (value === "r4fo.com"){
+
+        selectedurl = rf4opiped
+
+    }
+
+    else if (value === "kavin.rocks"){
+
+        selectedurl = kavinrockspiped    
+
+    }
+
+    const headers = {
+
+        'Content-Type': 'application/json',
+
+        'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+
+    }
+
     const fetchsongdata = async () => {
 
         try  {
@@ -106,11 +130,11 @@ export const Streamdata = (search , value) => {
 
             console.log(url);
 
-            const response = await fetch(url);
+            const response = await fetch(url,{method: 'GET', headers: headers});
 
             const responseData = await response.json();
 
-            // console.log(responseData);
+            console.log(responseData);
 
             const songurl = "https://piped.video" + responseData.items[0].url;
 
@@ -124,7 +148,7 @@ export const Streamdata = (search , value) => {
 
             const streams =/*  "https://pipedapi-libre.kavin.rocks"  */ selectedurl + `/streams/${videoid}`;
 
-            const responsestream = await fetch(streams);
+            const responsestream = await fetch(streams,{method: 'GET' , headers: headers});
             
             const responsestreamdata = await responsestream.json();
 
@@ -137,6 +161,8 @@ export const Streamdata = (search , value) => {
             const song_name = responsestreamdata.title;
 
             const artwork = responsestreamdata.thumbnailUrl;
+
+            const stream = responsestreamdata.audioStreams[0].url;
 
             console.log(stream);
 

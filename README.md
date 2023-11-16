@@ -34,16 +34,26 @@ I am SakuraBlossomTree the sole developer of this project
 
 #### Bugs
 
-1. If you want to play another song you have to first kill the app then play the song, if you fail to do this then the app will run in the background even after you kill the app
+1. The Shit Local Audio Player doesn't work
 
-2. The Shit Local Audio Player doesn't work
+2. And you have to search the song and press the button it will automatically take you to the Audio Player if you maunally go to the audio player then the app will crash
 
-3. And you have to search the song and press the button it will automatically take you to the Audio Player if you maunally go to the audio player then the app will crash
+3. If your song doesn't come up then Search like this "Song Name Artist Name"
 
-4. While the Song is repeated then the progress bar doesn't update
+4. You have to Add your track before playing it
 
 #### Updates
+
+#### You can check the Trello Board for new updates and bugs
 
 1. Added a Dropdown menu in the Settings menu (finally Settings is now useful)
 
 2. Changed UI alignments of the Stream Audio Player there looked to weird
+
+3. Slider works as expected
+
+4. Changed the Play Function
+
+5. Added New Instances Including the official Piped Instance
+
+6. Added Repeat Mode

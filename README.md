@@ -6,13 +6,13 @@ An Open Source Spotify Client made in React Native which utilises Piped API to g
 
 #### The list of bugs will be in the bugs section
 
-<img src="./screenshots/Screenshot_20231106-093740.png" alt="Screenshot 1" />
+<img src="./screenshots/Screenshot_20231119-190029.png" alt="Screenshot 1" />
 
 <!-- <img src="./screenshots/Screenshot_20231106-093745.png" alt="Screenshot 2" /> -->
 
-<img src="./screenshots/Screenshot_20231112-143705.png" alt="Screenshot 2" />
+<img src="./screenshots/Screenshot_20231119-190052.png" alt="Screenshot 2" />
 
-<img src="./screenshots/Screenshot_20231112-143711.png" alt="Screenshot 3" />
+<img src="./screenshots/Screenshot_20231119-190032.png" alt="Screenshot 3" />
 
 ### Development Board
 
@@ -45,15 +45,3 @@ I am SakuraBlossomTree the sole developer of this project
 #### Updates
 
 #### You can check the Trello Board for new updates and bugs
-
-1. Added a Dropdown menu in the Settings menu (finally Settings is now useful)
-
-2. Changed UI alignments of the Stream Audio Player there looked to weird
-
-3. Slider works as expected
-
-4. Changed the Play Function
-
-5. Added New Instances Including the official Piped Instance
-
-6. Added Repeat Mode

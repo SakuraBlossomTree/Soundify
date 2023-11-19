@@ -18,6 +18,9 @@ export const Streamdata = (search , value) => {
     // const songUrl = "https://piped.video/results?search_query=" + search
     
     // const url = `https://pipedapi.kavin.rocks/search?q=${search}&ffilter-all`;
+    
+    const artworkurl = "https://aiotube.deta.dev";
+    
     const pipedyt = "https://api.piped.yt"
 
     const garudalinuxpiped = "https://piped-api.garudalinux.org"
@@ -124,17 +127,17 @@ export const Streamdata = (search , value) => {
 
             const newsearch = newsearch ? search.replace(/ /g , '+') : search; 
 
-            console.log(search);
+            // console.log(search);
 
             const url = /* "https://pipedapi-libre.kavin.rocks"  */selectedurl + `/search?q=${newsearch}&filter=all`;
 
-            console.log(url);
+            // console.log(url);
 
             const response = await fetch(url,{method: 'GET', headers: headers});
 
             const responseData = await response.json();
 
-            console.log(responseData);
+            // console.log(responseData);
 
             const songurl = "https://piped.video" + responseData.items[0].url;
 
@@ -144,7 +147,7 @@ export const Streamdata = (search , value) => {
 
             const videoid = PipedVideoId(songurl);
 
-            console.log(videoid);
+            // console.log(videoid);
 
             const streams =/*  "https://pipedapi-libre.kavin.rocks"  */ selectedurl + `/streams/${videoid}`;
 
@@ -161,16 +164,24 @@ export const Streamdata = (search , value) => {
             const song_name = responsestreamdata.title;
 
             const artwork = responsestreamdata.thumbnailUrl;
+            
+            // const artworkdata = artworkurl + `/video/${videoid}`;
+
+            // const artworkstream = await fetch(artworkdata);
+
+            // const artworkstreamdata = await artworkstream.json();
+
+            // const artwork = artworkstreamdata.thumbnails[1].url;
 
             const stream = responsestreamdata.audioStreams[0].url;
 
-            console.log(stream);
+            // console.log(stream);
 
-            console.log(artist_name);
+            // console.log(artist_name);
 
-            console.log(song_name);
+            // console.log(song_name);
 
-            console.log(artwork);
+            // console.log(artwork);
 
             setArtistName(artist_name);
 

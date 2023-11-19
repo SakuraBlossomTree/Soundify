@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View , Text , Button , ActivityIndicator, StyleSheet } from 'react-native';
+import { View , Text , ActivityIndicator, StyleSheet ,useColorScheme} from 'react-native';
 import Silder from '@react-native-community/slider';
 import { Streamdata } from "../hooks/Streamdata";
-import TrackPlayer , { useProgress , RepeatMode } from "react-native-track-player";
-import { skipToNext, skipToPrevious } from "react-native-track-player/lib/trackPlayer";
+import TrackPlayer , { useProgress , RepeatMode, usePlaybackState , State, usePlayWhenReady } from "react-native-track-player";
 // import SoundPlayer from 'react-native-sound-player';
+import dark from "../colors"
+import { IconButton ,Card } from "react-native-paper";
 
 const StreamAudioPlayer = ({ route }) => {
     
@@ -16,7 +17,7 @@ const StreamAudioPlayer = ({ route }) => {
 
     const [queue, setQueue] = useState([]);
 
-    const [currentId , setCurrentId] = useState(1);
+    const [currentId , setCurrentId] = useState(0);
 
     const [printrepeatmode , setPrintRepeatMode] = useState("OFF");
     
@@ -25,6 +26,14 @@ const StreamAudioPlayer = ({ route }) => {
     const { position, buffered, duration } = useProgress();
 
     const [seekPosition , setSeekPosition] = useState(0);
+
+    const [currentTrackId, setCurrentTrackId] = useState(null);
+
+    const [nextTrack , setNextTrack] = useState(null);
+
+    const theme = useColorScheme();
+
+    const isDarkTheme = theme === 'dark';
 
     // const playaudio = () => {
     //
@@ -38,6 +47,36 @@ const StreamAudioPlayer = ({ route }) => {
     //         console.log(`cannot play the sound file`, e)
     // 
     //     }
+
+    const playbackState = usePlaybackState();
+
+    const playerReady = usePlayWhenReady();
+
+    const [isBuffering , setIsBuffering] = useState(false);
+
+    const [isPlaying , setIsPlaying] = useState(false);
+
+    useEffect(() => {
+
+        if (playerReady && (playbackState === State.Buffering || playbackState === State.Loading)){
+
+          setIsBuffering(true);  
+
+        }
+        else if (playerReady && !(playbackState === State.Error || playbackState === State.Buffering)){
+
+            setIsBuffering(false);
+            setIsPlaying(true);
+
+        }
+        else{
+
+            setIsPlaying(false);
+
+        }
+
+
+   }, [playbackState])
 
     const addTrack = async (audioUrl , songname , artwork  , artistname) => {
 
@@ -63,10 +102,36 @@ const StreamAudioPlayer = ({ route }) => {
 
     }
 
+    const togglePlayback = async () => {
+        if (isPlaying) {
+            await TrackPlayer.pause();
+        } else {
+            await TrackPlayer.play();
+        }
+    };
+
     const playAudio = async () => {
         
         await TrackPlayer.play();
         
+        const trackname = await TrackPlayer.getActiveTrack();
+
+        // console.log(trackname);
+
+        setCurrentTrackId(trackname?.title);
+   
+        const currenttrackplaying = await TrackPlayer.getActiveTrackIndex(); 
+
+        const nexttrack = await TrackPlayer.getTrack(currenttrackplaying+1);
+ 
+        // console.log(await TrackPlayer.getTrack(currentId-1));
+
+        // console.log(currentId);
+
+        // console.log(nexttrack?.title);
+
+        setNextTrack(nexttrack?.title);
+
     };
 
     const pauseAudio = async () => {
@@ -109,7 +174,20 @@ const StreamAudioPlayer = ({ route }) => {
         setPrintRepeatMode(newprintrepeatmode);
 
     }
-
+// <IconButton 
+//
+//                                     mode='contained'
+//                                     icon='play'
+//                                     onPress={()=>{playAudio()}}        
+//                                 />
+//
+//                                 <IconButton 
+//                                     
+//                                     mode='contained'
+//                                     icon='pause'
+//                                     onPress={()=> pauseAudio()}        
+//                         
+//                                 />
     const getRepeatMode = async () => {
 
         console.log(await TrackPlayer.getRepeatMode());
@@ -128,127 +206,116 @@ const StreamAudioPlayer = ({ route }) => {
 
     }
 
-    const getActiveQueue = async () => {
-
-        await TrackPlayer.getQueue();
-
-    }
-
     return (
-       
-        <View style={{ flex: 1, alignItems: 'center'}}>
+        
+        <View style={[{flex:1},isDarkTheme ? {backgroundColor: dark.dark.themeColor} : {backgroundColor: 'white'}]}>
 
-            {streamDataResult.isLoading ? (
-                <ActivityIndicator size="large" />
-            ) : (
+            <View style={{ flex: 1, alignItems: 'center'}}>
 
-                <>
-                    <Text style={{ color: "#000000" }}>This is the stream audio player</Text>
+                {streamDataResult.isLoading ? (
+                    <ActivityIndicator size="large" />
+                ) : (
 
-                    <Text style={{ color: "#000000" }}>Track progress: {position} seconds out of {duration} total</Text>
-            
-                    <Text style={{ color: "#000000" }}>Buffered progress: {buffered} seconds buffered out of {duration} total</Text>
-
-                    <Silder 
+                    <>
                         
-                        style={{ width: 300 , height: 40 }}
-                        minimumValue={0}
-                        maximumValue={duration}
-                        value={position}
-                        onValueChange={(value) => setSeekPosition(value)}
-                        onSlidingComplete={(value) => {
+                        <Card>
+                            <Card.Cover source={{ uri : streamDataResult.artwork}} style={{width: 200, height:200}}/>
+                        </Card>
+                        
+                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{streamDataResult.song_name}</Text>
 
-                            TrackPlayer.seekTo(value);
-                            setSeekPosition(value);
+                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{streamDataResult.artist_name}</Text>
+                        
+                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{position} seconds out of {duration} total</Text>
+                
+                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>buffer: {buffered} seconds buffered out of {duration} total</Text>
 
-                        }}
+                        <Text style={{ color: 'white'}}>Next Song: {nextTrack}</Text>
+                        
+                        <Silder 
+                            
+                            style={{ width: 400 , height: 60 }}
+                            minimumValue={0}
+                            maximumValue={duration}
+                            value={position}
+                            onValueChange={(value) => setSeekPosition(value)}
+                            onSlidingComplete={(value) => {
+
+                                TrackPlayer.seekTo(value);
+                                setSeekPosition(value);
+
+                            }}
 
 
-                    />
+                        />
+                        
+                        <View style={styles.container}>
 
-                    <Text style={{ color: "#000000" }}>Repeat Mode: {printrepeatmode}</Text>
-                    
-                    <View style={styles.container}>
+                            <View style={styles.playcontrols}>
+                            
+                                <IconButton            
+                                        
+                                        icon='plus'
+                                        onPress={() => addTrack(streamDataResult.stream , streamDataResult.song_name , streamDataResult.artwork , streamDataResult.artist_name)}
+                                        mode='contained'
 
-                        <View style={styles.playcontrols}>
-                         
-                            <Button            
+                                /> 
                                 
-                                onPress={() => addTrack(streamDataResult.stream , streamDataResult.song_name , streamDataResult.artwork , streamDataResult.artist_name)}
-                                title="Add Track"
+                                <IconButton 
+                               
+                                    mode='contained'
+                                    icon='skip-previous'
+                                    onPress={() => skipPrev()}
 
-                            />
+                                />
+                                                
+                                <IconButton
+                                    mode="contained"
+                                    icon={isPlaying ? ('pause') : ('play')}
+                                    onPress={togglePlayback}
+                                />           
 
-                            <Button 
+                                <IconButton 
 
-                                onPress={()=>{playAudio()}}        
-                                title="Play"
+                                    mode='contained'
+                                    icon='skip-next'
+                                    onPress={() => skipNext()}
+
+                                />
+                                
+                                <IconButton 
+
+                                    mode='contained'
+                                    icon='stop'
+                                    onPress={()=> stopAudio()}        
                         
-                            />
-            
-                            <Button 
+                                />
+                                
+                                <IconButton 
 
-                                onPress={()=> pauseAudio()}        
-                                title="Pause"
-                    
-                            />
-                    
-                            <Button 
+                                    mode='contained'
+                                    icon={repeatMode ? ('repeat-once'):('repeat')}
+                                    onPress={()=> toggleRepeatMode()}        
+                            
+                                />
+                            
+                            </View>
 
-                                onPress={()=> stopAudio()}        
-                                title="Stop"
+                            
+                            
+                            
                     
-                            />
-
+                            
                         </View>
 
-                    
-                        <Button 
-
-                            onPress={()=> toggleRepeatMode()}        
-                            title="Repeat"
-                        
-                        />
-                
-                        <Button 
-
-                            onPress={()=> getRepeatMode()}        
-                            title="Print Repeat Mode"
-                        
-                        />
-
-                        <Button 
-                            
-                            onPress={() => skipNext()}
-                            title="Skip to Next"
-
-                        />
-
-                        <Button 
-                            
-                            onPress={() => skipPrev()}
-                            title="Skip to Previous"
-
-                        />
-
-                        <Button 
-                            
-                            onPress={() => getActiveQueue()}
-                            title="Print Queue"
-
-                        />
                         
 
-                    </View>
+                    </>
 
-                    
+                )}
 
-                </>
-
-            )}
-
+            </View>
         </View>
-
                
     );
 
@@ -258,7 +325,6 @@ const styles = StyleSheet.create({
 
     container: {
 
-        flex:0.7,
         justifyContent: 'space-evenly'
 
     },
@@ -267,7 +333,7 @@ const styles = StyleSheet.create({
 
         flexDirection: 'row',
         justifyContent: 'space-between',
-        gap: 10
+        gap: 5 
 
     }
 

@@ -29,6 +29,10 @@ const StreamAudioPlayer = ({ route }) => {
 
     const [currentTrackId, setCurrentTrackId] = useState(null);
 
+    const [currentArtistName, setCurrentArtistName] = useState(null);
+    
+    const [currentSongArtwork, setCurrentSongArtwork] = useState("https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    
     const [nextTrack , setNextTrack] = useState(null);
 
     const theme = useColorScheme();
@@ -103,23 +107,17 @@ const StreamAudioPlayer = ({ route }) => {
     }
 
     const togglePlayback = async () => {
-        if (isPlaying) {
-            await TrackPlayer.pause();
-        } else {
-            await TrackPlayer.play();
-        }
-    };
-
-    const playAudio = async () => {
-        
-        await TrackPlayer.play();
         
         const trackname = await TrackPlayer.getActiveTrack();
 
         // console.log(trackname);
 
         setCurrentTrackId(trackname?.title);
-   
+  
+        setCurrentArtistName(trackname?.artist);
+
+        setCurrentSongArtwork(trackname?.artwork);
+
         const currenttrackplaying = await TrackPlayer.getActiveTrackIndex(); 
 
         const nexttrack = await TrackPlayer.getTrack(currenttrackplaying+1);
@@ -132,6 +130,18 @@ const StreamAudioPlayer = ({ route }) => {
 
         setNextTrack(nexttrack?.title);
 
+        if (isPlaying) {
+            await TrackPlayer.pause();
+        } else {
+            await TrackPlayer.play();
+        }
+    };
+
+    const playAudio = async () => {
+        
+        await TrackPlayer.play();
+        
+       
     };
 
     const pauseAudio = async () => {
@@ -219,12 +229,12 @@ const StreamAudioPlayer = ({ route }) => {
                     <>
                         
                         <Card>
-                            <Card.Cover source={{ uri : streamDataResult.artwork}} style={{width: 200, height:200}}/>
+                            <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 200, height:200}}/>
                         </Card>
                         
-                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{streamDataResult.song_name}</Text>
+                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentTrackId}</Text>
 
-                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{streamDataResult.artist_name}</Text>
+                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentArtistName}</Text>
                         
                         <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{position} seconds out of {duration} total</Text>
                 

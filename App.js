@@ -8,10 +8,15 @@ import LocalAudioPlayer from "./screens/LocalAudioPlayer.js";
 import StreamAudioPlayer from "./screens/StreamAudioPlayer.js";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { PaperProvider } from "react-native-paper";
+import { MD3Colors, PaperProvider } from "react-native-paper";
 import dark from "./colors";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import GearIcon from 'react-native-vector-icons/Octicons';
 
-const Drawer = createDrawerNavigator();
+// const Drawer = createDrawerNavigator();
+
+const Tab = createBottomTabNavigator();
 
 export const ThemeContext = React.createContext();
 
@@ -25,93 +30,136 @@ const App = () => {
             <PaperProvider>
                 <ThemeContext.Provider value={{ theme, setTheme }}>
                     <NavigationContainer navigationOptions>
-                        <Drawer.Navigator
+                        <Tab.Navigator
                             initialRouteName={'Home'}
                             
                             screenOptions={{
-                                drawerStyle:{
-                                    backgroundColor: dark.dark.themeColor, // Set the background color of the drawer
-                                    color: 'white', // Set text color in the drawer
-                                },
-                                drawerType:"slide",
-                                drawerLabelStyle:{color: 'white'},
-                                drawerActiveBackgroundColor:"#6272a4"
+                                activeTintColor: dark.dark.themeColor
                             }} 
                         >
-                          <Drawer.Group>
-                            <Drawer.Screen
+                          <Tab.Group>
+                            <Tab.Screen
                               name="Home"
                               component={HomeScreen}
                               options={{
-                                title: 'Home Screen',
+                                tabBarLabel: 'Home Screen',
+                                tabBarStyle: {
+                                    backgroundColor: dark.dark.themeColor,
+                                },
                                 headerStyle: {
                                   backgroundColor: dark.dark.themeColor,// Set the background color of the header
                                 },
                                 headerTintColor: 'white', // Set text color in the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <Icon name="home" color={MD3Colors.primary80} size={20} /> 
+                                
+                                },
+
+                                tabBarActiveTintColor: MD3Colors.primary90
+
                               }}
                             />
 
-                            <Drawer.Screen
+                            <Tab.Screen
                               name="AudioPlayer"
                               component={AudioPlayer}
                               options={{
-                                title: 'Audio Player',
+                                title: 'Video Player',
                                 headerStyle: {
                                   backgroundColor: dark.dark.themeColor,/// Set the background color of the header
                                 },
                                 headerTintColor: 'white', // Set text color in the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <Icon name="video" color={MD3Colors.primary80} size={20} /> 
+                                
+                                },
+
+                                tabBarActiveTintColor: MD3Colors.primary90
+
                               }}
                             />
 
-                            <Drawer.Screen
+                            <Tab.Screen
                               name="Playlist"
                               component={Playlist}
                               options={{
-                                title: 'Your Playlists',
+                                title: 'Playlists',
                                 headerStyle: {
                                   backgroundColor: dark.dark.themeColor,// Set the background color of the header
                                 },
                                 headerTintColor: 'white', // Set text color in the header
-                              }}
-                            />
-
-                            <Drawer.Screen
-                              name="Settings"
-                              component={Settings}
-                              options={{
-                                title: 'Settings Screen',
-                                headerStyle: {
-                                  backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <Icon name="playlist-music" color={MD3Colors.primary80} size={20} /> 
+                                
                                 },
-                                headerTintColor: 'white', // Set text color in the header
+
+                                tabBarActiveTintColor: MD3Colors.primary90
+
                               }}
                             />
 
-                            <Drawer.Screen
-                              name="LocalAudioPlayer"
-                              component={LocalAudioPlayer}
-                              options={{
-                                title: 'Your Shit Local Audio Player',
-                                headerStyle: {
-                                  backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
-                                },
-                                headerTintColor: 'white', // Set text color in the header
-                              }}
-                            />
-
-                            <Drawer.Screen
+                            <Tab.Screen
                               name="StreamAudioPlayer"
                               component={StreamAudioPlayer}
                               options={{
-                                title: "Finally it is wokring yeeee!",
+                                title: "Music Player",
                                 headerStyle: {
                                   backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
                                 },
                                 headerTintColor: 'white', // Set text color in the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <Icon name="play" color={MD3Colors.primary80} size={20} /> 
+                                
+                                },
+
+                                tabBarActiveTintColor: MD3Colors.primary90
                               }}
                             />
-                          </Drawer.Group>
-                        </Drawer.Navigator>
+
+                            <Tab.Screen
+                              name="LocalAudioPlayer"
+                              component={LocalAudioPlayer}
+                              options={{
+                                title: 'Local Audio Player',
+                                headerStyle: {
+                                  backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
+                                },
+                                headerTintColor: 'white', // Set text color in the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <Icon name="file-music" color={MD3Colors.primary80} size={20} /> 
+                                
+                                },
+
+                                tabBarActiveTintColor: MD3Colors.primary90
+                              }}
+                            />
+
+                            <Tab.Screen
+                              name="Settings"
+                              component={Settings}
+                              options={{
+                                title: 'Settings',
+                                headerStyle: {
+                                  backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
+                                },
+                                headerTintColor: 'white', // Set text color in the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <GearIcon name="gear" color={MD3Colors.primary80} size={20} /> 
+                                
+                                },
+
+                                tabBarActiveTintColor: MD3Colors.primary90
+
+                              }}
+                            />
+                          </Tab.Group>
+                        </Tab.Navigator>
                     </NavigationContainer>
                 </ThemeContext.Provider>
             </PaperProvider>

@@ -1,0 +1,48 @@
+import React, {useState} from 'react';
+import View from 'react-native';
+import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
+
+const createPlaylist = () => {
+
+    const [visible, setVisible] = useState(false);
+
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = {backgroundColor: 'white', padding:  20};
+
+    const newPlaylist = () => {
+
+        return (
+
+            <PaperProvider>
+                <Portal>
+                    <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                        <Text>New Playlist. Click outside this area to dismiss.</Text>
+                    </Modal>
+                </Portal>
+
+            </PaperProvider>
+
+        )
+
+    }
+
+    return (
+        
+        <View>
+        
+            <Text>This is a test</Text>
+
+
+            <Button style={{marginTop: 30}} onPress={showModal}>
+                Show
+            </Button>
+
+        </View>
+
+
+    )
+
+}
+
+export default createPlaylist

@@ -1,41 +1,60 @@
-import React from 'react';
-import { View , Text} from 'react-native';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import React, {useState} from 'react';
+import View from 'react-native';
+import { Modal, Portal, Text, Button, PaperProvider , TextInput , Card} from 'react-native-paper';
 
 const Playlist = () => {
 
-    const PlaylistCard = ({ title, description }) => (
-            <Card>
-                <Card.Cover source={{ uri: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}} />
-                <Card.Content>
-                    <Text style={{ color: "#000000"}}>{title}</Text>
-                    <Text style={{ color: "#000000"}}>{description}</Text>
-                </Card.Content>
-            </Card>
-    );
+    const [visible, setVisible] = useState(false);
+    const [text, setText] = useState("");
+    const [playlists , setPlaylists] = useState([]);
+
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = {backgroundColor: 'black', padding:  20};
+
+    const createPlaylist = (playlistName) => {
+
+        setPlaylists((prevPlaylists) => [...prevPlaylists , { name: playlistName }])
+        hideModal();
     
-    const playlists = [
-            
-            { title: 'Playlist 1', description: 'Description for Playlist 1' },
-            { title: 'Playlist 2', description: 'Description for Playlist 2' },
-            // Add more playlists as needed
-    ];
-    
-    return(
+    }
+
+    return (
         
-        
+        <PaperProvider>
+            <Portal>
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                    <Text>New Playlist. Click outside this area to dismiss.</Text>
+                    <TextInput 
+                        label={"Playlist Name"}
+                        value={text}
+                        onChangeText={text => setText(text)}
+                    />
+                    <Button style={{marginTop: 30}} onPress={()=>{createPlaylist(text)}}>
+                        Create Playlist
+                    </Button>
+                </Modal>
+                
+            </Portal>
+            <Text>This is a test</Text>
 
-        <View style={{flex: 1}}>
 
-            <Text style={{color: '#000000'}}>This is the Playlist menu</Text>
+            {playlists.map((playlist) => (
 
-            {playlists.map((playlist, index) => (
-                <PlaylistCard key={index} {...playlist} />
+                <Card key={playlist.name}>
+                    <Card.Title title={playlist.name} />
+                </Card>
+
             ))}
 
-        </View>
+
+            <Button style={{marginTop: 30}} onPress={showModal}>
+                Show
+            </Button>
+
+        </PaperProvider>
         
-    )     
+    )
 
 }
 

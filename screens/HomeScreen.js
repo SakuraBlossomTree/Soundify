@@ -1,6 +1,6 @@
 import React , { useState }from "react";
 import { View , StyleSheet ,useColorScheme } from "react-native";
-import { Button , TextInput , Searchbar} from "react-native-paper";
+import { Button , TextInput , Searchbar, Text} from "react-native-paper";
 import dark from '../colors'
 
 const HomeScreen = ({ navigation }) => {

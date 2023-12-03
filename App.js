@@ -6,6 +6,7 @@ import Settings from './screens/Settings.js';
 import Playlist from "./screens/Playlist.js";
 import LocalAudioPlayer from "./screens/LocalAudioPlayer.js";
 import StreamAudioPlayer from "./screens/StreamAudioPlayer.js";
+import Search from './screens/Search.js';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MD3Colors, PaperProvider } from "react-native-paper";
@@ -66,13 +67,38 @@ const App = () => {
                               component={AudioPlayer}
                               options={{
                                 title: 'Video Player',
-                                headerStyle: {
+                                tabBarStyle: {
                                   backgroundColor: dark.dark.themeColor,/// Set the background color of the header
+                                },
+                                headerStyle: {
+                                  backgroundColor: dark.dark.themeColor,// Set the background color of the header
                                 },
                                 headerTintColor: 'white', // Set text color in the header
                                 tabBarIcon: ({ color , size }) => {
                                     
                                     return <Icon name="video" color={MD3Colors.primary80} size={20} /> 
+                                
+                                },
+
+                                tabBarActiveTintColor: MD3Colors.primary90
+
+                              }}
+                            />
+                            <Tab.Screen
+                              name="Search"
+                              component={Search}
+                              options={{
+                                title: 'Search',
+                                tabBarStyle: {
+                                    backgroundColor: dark.dark.themeColor,/// Set the background color of the header
+                                },
+                                headerStyle: {
+                                    backgroundColor: dark.dark.themeColor
+                                },
+                                headerTintColor: 'white' , // Set text color in the header
+                                tabBarIcon: ({ color , size }) => {
+                                    
+                                    return <GearIcon name="search" color={MD3Colors.primary80} size={20} /> 
                                 
                                 },
 
@@ -86,6 +112,9 @@ const App = () => {
                               component={Playlist}
                               options={{
                                 title: 'Playlists',
+                                tabBarStyle:{
+                                    backgroundColor: dark.dark.themeColor
+                                },
                                 headerStyle: {
                                   backgroundColor: dark.dark.themeColor,// Set the background color of the header
                                 },
@@ -106,6 +135,9 @@ const App = () => {
                               component={StreamAudioPlayer}
                               options={{
                                 title: "Music Player",
+                                tabBarStyle:{
+                                    backgroundColor: dark.dark.themeColor
+                                },
                                 headerStyle: {
                                   backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
                                 },
@@ -125,6 +157,9 @@ const App = () => {
                               component={LocalAudioPlayer}
                               options={{
                                 title: 'Local Audio Player',
+                                tabBarStyle: {
+                                    backgroundColor: dark.dark.themeColor
+                                },
                                 headerStyle: {
                                   backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
                                 },
@@ -144,10 +179,13 @@ const App = () => {
                               component={Settings}
                               options={{
                                 title: 'Settings',
+                                tabBarStyle:{
+                                    backgroundColor: dark.dark.themeColor
+                                },
                                 headerStyle: {
                                   backgroundColor:  dark.dark.themeColor,/// Set the background color of the header
                                 },
-                                headerTintColor: 'white', // Set text color in the header
+                                headerTintColor: dark.dark.themeColor, // Set text color in the header
                                 tabBarIcon: ({ color , size }) => {
                                     
                                     return <GearIcon name="gear" color={MD3Colors.primary80} size={20} /> 

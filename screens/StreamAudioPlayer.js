@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { View , Text , ActivityIndicator, StyleSheet ,useColorScheme} from 'react-native';
 import Silder from '@react-native-community/slider';
-import { Streamdata } from "../hooks/Streamdata";
 import TrackPlayer , { useProgress , RepeatMode, usePlaybackState , State, usePlayWhenReady } from "react-native-track-player";
 // import SoundPlayer from 'react-native-sound-player';
 import dark from "../colors"
-import { IconButton ,Card } from "react-native-paper";
+import { IconButton ,Card , Modal, Portal , Button , PaperProvider} from "react-native-paper";
 
 const StreamAudioPlayer = ({ route }) => {
     
-    const { search } = route.params;
+    const { song_name,artist_name,artwork,stream,isLoading } = route.params;
     
     // const pipedSearchUrl = `https://youtube.com/results?search_query=${search}`;
-   
+    
+    const [visible, setVisible] = useState(false);
+
+    const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = {backgroundColor: 'black', padding: 20}
+
     const [repeatMode , setRepeatMode] = useState(false);
 
     const [queue, setQueue] = useState([]);
@@ -21,8 +28,6 @@ const StreamAudioPlayer = ({ route }) => {
 
     const [printrepeatmode , setPrintRepeatMode] = useState("OFF");
     
-    const streamDataResult = Streamdata(search);
-
     const { position, buffered, duration } = useProgress();
 
     const [seekPosition , setSeekPosition] = useState(0);
@@ -216,117 +221,133 @@ const StreamAudioPlayer = ({ route }) => {
 
     }
 
+    const saveToPlaylist = () => {
+
+        console.log("Saving to Playlist");
+
+    }
+
+    useEffect(() => {
+
+            console.log(route.params);
+
+    }, [route.params])
+
     return (
-        
-        <View style={[{flex:1},isDarkTheme ? {backgroundColor: dark.dark.themeColor} : {backgroundColor: 'white'}]}>
+        <PaperProvider>
+            <View style={[{flex:1},isDarkTheme ? {backgroundColor: dark.dark.themeColor} : {backgroundColor: 'white'}]}>
 
-            <View style={{ flex: 1, alignItems: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center'}}>
 
-                {streamDataResult.isLoading ? (
-                    <ActivityIndicator size="large" />
-                ) : (
+                    {isLoading ? (
+                        <ActivityIndicator size="large" />
+                    ) : (
 
-                    <>
-                        
-                        <Card>
-                            <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 200, height:200}}/>
-                        </Card>
-                        
-                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentTrackId}</Text>
-
-                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentArtistName}</Text>
-                        
-                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{position} seconds out of {duration} total</Text>
-                
-                        <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>buffer: {buffered} seconds buffered out of {duration} total</Text>
-
-                        <Text style={{ color: 'white'}}>Next Song: {nextTrack}</Text>
-                        
-                        <Silder 
+                        <>
                             
-                            style={{ width: 400 , height: 60 }}
-                            minimumValue={0}
-                            maximumValue={duration}
-                            value={position}
-                            onValueChange={(value) => setSeekPosition(value)}
-                            onSlidingComplete={(value) => {
-
-                                TrackPlayer.seekTo(value);
-                                setSeekPosition(value);
-
-                            }}
-
-
-                        />
-                        
-                        <View style={styles.container}>
-
-                            <View style={styles.playcontrols}>
+                            <Card>
+                                <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 200, height:200}}/>
+                            </Card>
                             
-                                <IconButton            
-                                        
-                                        icon='plus'
-                                        onPress={() => addTrack(streamDataResult.stream , streamDataResult.song_name , streamDataResult.artwork , streamDataResult.artist_name)}
+                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentTrackId}</Text>
+
+                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentArtistName}</Text>
+                            
+                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{position} seconds out of {duration} total</Text>
+                    
+                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>buffer: {buffered} seconds buffered out of {duration} total</Text>
+
+                            <Text style={{ color: 'white'}}>Next Song: {nextTrack}</Text>
+                            
+                            <Silder 
+                                
+                                style={{ width: 400 , height: 60 }}
+                                minimumValue={0}
+                                maximumValue={duration}
+                                value={position}
+                                onValueChange={(value) => setSeekPosition(value)}
+                                onSlidingComplete={(value) => {
+
+                                    TrackPlayer.seekTo(value);
+                                    setSeekPosition(value);
+
+                                }}
+
+
+                            />
+                            
+                            <View style={styles.container}>
+
+                                <View style={styles.playcontrols}>
+                                
+                                    <IconButton            
+                                            
+                                            icon='plus'
+                                            onPress={() => addTrack(stream , song_name , artwork , artist_name)}
+                                            mode='contained'
+
+                                    />
+
+                                    <IconButton 
+                                   
                                         mode='contained'
+                                        icon='skip-previous'
+                                        onPress={() => skipPrev()}
 
-                                /> 
-                                
-                                <IconButton 
-                               
-                                    mode='contained'
-                                    icon='skip-previous'
-                                    onPress={() => skipPrev()}
+                                    />
+                                                    
+                                    <IconButton
+                                        mode="contained"
+                                        icon={isPlaying ? ('pause') : ('play')}
+                                        onPress={togglePlayback}
+                                    />           
 
-                                />
-                                                
-                                <IconButton
-                                    mode="contained"
-                                    icon={isPlaying ? ('pause') : ('play')}
-                                    onPress={togglePlayback}
-                                />           
+                                    <IconButton 
 
-                                <IconButton 
+                                        mode='contained'
+                                        icon='skip-next'
+                                        onPress={() => skipNext()}
 
-                                    mode='contained'
-                                    icon='skip-next'
-                                    onPress={() => skipNext()}
+                                    />
+                                    
+                                    <IconButton 
 
-                                />
-                                
-                                <IconButton 
-
-                                    mode='contained'
-                                    icon='stop'
-                                    onPress={()=> stopAudio()}        
-                        
-                                />
-                                
-                                <IconButton 
-
-                                    mode='contained'
-                                    icon={repeatMode ? ('repeat-once'):('repeat')}
-                                    onPress={()=> toggleRepeatMode()}        
+                                        mode='contained'
+                                        icon='stop'
+                                        onPress={()=> stopAudio()}        
                             
-                                />
-                            
+                                    />
+                                    
+                                    <IconButton 
+
+                                        mode='contained'
+                                        icon={repeatMode ? ('repeat-once'):('repeat')}
+                                        onPress={()=> toggleRepeatMode()}        
+                                
+                                    />
+                                
+                                </View>
+                                
                             </View>
 
                             
-                            
-                            
-                    
-                            
-                        </View>
+
+                        </>
 
                         
 
-                    </>
-
-                )}
-
+                    )}
+                    
+                        <Portal>
+                            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                                <Text>These are your playlists.</Text>
+                                <Text></Text>
+                            </Modal>
+                        </Portal>
+                   
+                </View>
             </View>
-        </View>
-               
+        </PaperProvider>        
     );
 
 };

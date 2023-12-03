@@ -1,7 +1,16 @@
-import { useState , useEffect }from "react";
-import { PipedVideoId } from "./PipedVideoId";
+import { useState , useEffect, useContext }from "react";
+import { StyleSheet, View ,Dimensions} from "react-native";
+import { IconButton, Card, Searchbar } from "react-native-paper";
+import { PipedVideoId } from "../hooks/PipedVideoId";
+import dark from '../colors'
 
-export const Streamdata = (search , value) => {
+const screenwidth = Dimensions.get('window').width;
+
+const Search = ({ navigation , route })  => {
+
+    const [search , setSearch] = useState('');
+
+    const { value } = route.params;
 
     const [songurl , setSongurl] = useState("8.8");
 
@@ -9,11 +18,13 @@ export const Streamdata = (search , value) => {
 
     const [artist_name , setArtistName] = useState("");
 
-    const [artwork, setArtwork] = useState("");
+    const [artwork, setArtwork] = useState("https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
    
     const [song_name , setSongName] = useState("");
 
     const [isLoading , setIsLoading] = useState(true);
+
+    const onChangeSearch = (search) => setSearch(search); 
 
     // const songUrl = "https://piped.video/results?search_query=" + search
     
@@ -127,7 +138,7 @@ export const Streamdata = (search , value) => {
 
             const newsearch = newsearch ? search.replace(/ /g , '+') : search; 
 
-            // console.log(search);
+            console.log(search);
 
             const url = /* "https://pipedapi-libre.kavin.rocks"  */selectedurl + `/search?q=${newsearch}&filter=all`;
 
@@ -175,13 +186,13 @@ export const Streamdata = (search , value) => {
 
             const stream = responsestreamdata.audioStreams[0].url;
 
-            // console.log(stream);
+            console.log(stream); 
 
-            // console.log(artist_name);
+            console.log(artist_name);
 
-            // console.log(song_name);
+            console.log(song_name);
 
-            // console.log(artwork);
+            console.log(artwork);
 
             setArtistName(artist_name);
 
@@ -191,33 +202,89 @@ export const Streamdata = (search , value) => {
 
             setStream(stream); 
 
-            return { songurl , stream , artist_name , artwork , song_name};
-
         } catch (err){
 
             console.log(err);
 
-            return { songurl , stream  , artist_name , artwork , song_name};
-
         } finally {
 
             setIsLoading(false);
-            
-            return { songurl , stream  , artist_name , artwork , song_name , isLoading};
-
+           
         }
         
 
     };
 
-    useEffect(() => {
+   return (
 
-        fetchsongdata();
+        <View style={{flex:1, backgroundColor: dark.dark.themeColor}}>
 
-    }, [search]);
+           <View>
 
-    return { songurl , stream  , artist_name , artwork , song_name , isLoading};
+                <Searchbar 
+                           
+                    placeholder="Search Music"
+                    onChangeText={onChangeSearch}
+                    value={search}
+                    onIconPress={() => {
+                                                    
+                        console.log("Button Pressed");
+
+                        fetchsongdata();
+
+                    }}
+                        
+
+                />
+
+                <Card style={styles.container}>
+
+                    <View style={styles.cardContent}>
+                        
+                        <Card.Cover source={{ uri: artwork }}  style={{ width: 50 , height: 50 }}/>
+
+                            <Card.Title title={song_name} subtitle={artist_name} style={styles.textContainer}/>
+
+                        <Card.Actions>
+                            
+                            <IconButton icon='play' mode="contained" onPress={() => {
+
+                                navigation.navigate('StreamAudioPlayer', {song_name,artist_name,artwork,stream,isLoading})
+
+                            }}/>
+
+                        </Card.Actions>
+                    </View>
+                </Card>
+
+           </View> 
+
+        </View>
+
+   ) 
 
 }
 
-    
+const styles = StyleSheet.create({
+
+   container: {
+        margin: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: screenwidth - 20,
+    },
+    cardContent: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: screenwidth - 30,
+    },
+    textContainer: {
+        marginLeft: 10,
+        flexShrink: 1,  // Allow the text to shrink if it doesn't fit
+    }, 
+
+
+})
+
+export default Search;

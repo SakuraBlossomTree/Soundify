@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import View from 'react-native';
+// import { Picker } from 'react-native';
 import { Modal, Portal, Text, Button, PaperProvider , TextInput , Card} from 'react-native-paper';
 
 const Playlist = () => {
@@ -7,6 +7,7 @@ const Playlist = () => {
     const [visible, setVisible] = useState(false);
     const [text, setText] = useState("");
     const [playlists , setPlaylists] = useState([]);
+    const [selectedPlaylist , setSelectedPlaylist] = useState(null);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);

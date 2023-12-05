@@ -29,8 +29,8 @@ const Settings = ({ navigation }) => {
         { label: 'palveluntarjoaja.eu', value: 'palveluntarjoaja.eu'},
         { label: 'projectsegfau.lt-in', value: 'projectsegfau.lt-in'},
         { label: 'r4fo.com', value: 'r4fo.com'},
-        { label: 'kavin.rocks', value: 'kavin.rocks'}
-    
+        { label: 'kavin.rocks', value: 'kavin.rocks'},
+        { label: 'JioSaavan', value: 'saavn.me'},
     ]);
   
     const theme = useColorScheme();

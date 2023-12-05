@@ -3,6 +3,7 @@ import { StyleSheet, View ,Dimensions} from "react-native";
 import { IconButton, Card, Searchbar } from "react-native-paper";
 import { PipedVideoId } from "../hooks/PipedVideoId";
 import dark from '../colors'
+const YTMusic = require("ytmusic-api").default
 
 const screenwidth = Dimensions.get('window').width;
 
@@ -25,6 +26,8 @@ const Search = ({ navigation , route })  => {
     const [isLoading , setIsLoading] = useState(true);
 
     const onChangeSearch = (search) => setSearch(search); 
+
+    const ytmusic = new YTMusic();
 
     // const songUrl = "https://piped.video/results?search_query=" + search
     
@@ -55,6 +58,10 @@ const Search = ({ navigation , route })  => {
     const rf4opiped = "https://pipedapi.r4fo.com"
 
     const kavinrockspiped = "https://pipedapi.kavin.rocks"
+
+    const jiosaavan = "https://saavn.me"
+
+    const ytmusicurl = "https://nowebsite.com";
 
     if (value === "piped.yt"){
 
@@ -124,6 +131,18 @@ const Search = ({ navigation , route })  => {
 
     }
 
+    else if (value === "saavn.me"){
+
+        selectedurl = jiosaavan
+
+    }
+
+    else if (value === "yt.music"){
+
+        selectedurl = ytmusicurl;
+
+    }
+
     const headers = {
 
         'Content-Type': 'application/json',
@@ -134,83 +153,140 @@ const Search = ({ navigation , route })  => {
 
     const fetchsongdata = async () => {
 
-        try  {
+        if (selectedurl === jiosaavan){
 
-            const newsearch = newsearch ? search.replace(/ /g , '+') : search; 
+            try {
 
-            console.log(search);
+                console.log(search);
 
-            const url = /* "https://pipedapi-libre.kavin.rocks"  */selectedurl + `/search?q=${newsearch}&filter=all`;
+                const url = selectedurl + `/search/songs?query=${search}`
 
-            // console.log(url);
+                console.log(url);
 
-            const response = await fetch(url,{method: 'GET', headers: headers});
+                const response = await fetch(url);
 
-            const responseData = await response.json();
+                console.log(response);
 
-            // console.log(responseData);
+                const responseData = await response.json();
 
-            const songurl = "https://piped.video" + responseData.items[0].url;
+                console.log(responseData);
 
-            // const artwork = responseData.items[0].thumbnail;
+                const songurl = responseData.data.results[0].downloadUrl[2].link;
 
-            setSongurl(songurl);
+                const artwork = responseData.data.results[0].image[2].link;
 
-            const videoid = PipedVideoId(songurl);
+                const artist_name = responseData.data.results[0].primaryArtists;
 
-            // console.log(videoid);
+                const song_name = responseData.data.results[0].name; 
 
-            const streams =/*  "https://pipedapi-libre.kavin.rocks"  */ selectedurl + `/streams/${videoid}`;
+                console.log(songurl);
+               
+                setSongName(song_name);
 
-            const responsestream = await fetch(streams,{method: 'GET' , headers: headers});
-            
-            const responsestreamdata = await responsestream.json();
+                setArtistName(artist_name);
 
-            // console.log(responsestreamdata);
-            
-            const artist_name = responsestreamdata.uploader;
+                setArtwork(artwork);
 
-            // const song_name = responsestreamdata.title; 
+                setStream(songurl);
 
-            const song_name = responsestreamdata.title;
+            } catch(err){
+                
+                console.error(err);
 
-            const artwork = responsestreamdata.thumbnailUrl;
-            
-            // const artworkdata = artworkurl + `/video/${videoid}`;
+            } finally {
 
-            // const artworkstream = await fetch(artworkdata);
-
-            // const artworkstreamdata = await artworkstream.json();
-
-            // const artwork = artworkstreamdata.thumbnails[1].url;
-
-            const stream = responsestreamdata.audioStreams[0].url;
-
-            console.log(stream); 
-
-            console.log(artist_name);
-
-            console.log(song_name);
-
-            console.log(artwork);
-
-            setArtistName(artist_name);
-
-            setArtwork(artwork);
-
-            setSongName(song_name);
-
-            setStream(stream); 
-
-        } catch (err){
-
-            console.log(err);
-
-        } finally {
-
-            setIsLoading(false);
+                setIsLoading(false);
            
+            }
+
+        } else if (selectedurl === ytmusicurl) {
+
+            pass
+
+        } else {
+
+             try  {
+
+                const newsearch = newsearch ? search.replace(/ /g , '+') : search; 
+
+                console.log(search);
+
+                const url = /* "https://pipedapi-libre.kavin.rocks"  */selectedurl + `/search?q=${newsearch}&filter=all`;
+
+                // console.log(url);
+
+                const response = await fetch(url,{method: 'GET', headers: headers});
+
+                const responseData = await response.json();
+
+                // console.log(responseData);
+
+                const songurl = "https://piped.video" + responseData.items[0].url;
+
+                // const artwork = responseData.items[0].thumbnail;
+
+                setSongurl(songurl);
+
+                const videoid = PipedVideoId(songurl);
+
+                // console.log(videoid);
+
+                const streams =/*  "https://pipedapi-libre.kavin.rocks"  */ selectedurl + `/streams/${videoid}`;
+
+                const responsestream = await fetch(streams,{method: 'GET' , headers: headers});
+                
+                const responsestreamdata = await responsestream.json();
+
+                // console.log(responsestreamdata);
+                
+                const artist_name = responsestreamdata.uploader;
+
+                // const song_name = responsestreamdata.title; 
+
+                const song_name = responsestreamdata.title;
+
+                const artwork = responsestreamdata.thumbnailUrl;
+                
+                // const artworkdata = artworkurl + `/video/${videoid}`;
+
+                // const artworkstream = await fetch(artworkdata);
+
+                // const artworkstreamdata = await artworkstream.json();
+
+                // const artwork = artworkstreamdata.thumbnails[1].url;
+
+                const stream = responsestreamdata.audioStreams[0].url;
+
+                console.log(stream); 
+
+                console.log(artist_name);
+
+                console.log(song_name);
+
+                console.log(artwork);
+
+                setArtistName(artist_name);
+
+                setArtwork(artwork);
+
+                setSongName(song_name);
+
+                setStream(stream); 
+
+            } catch (err){
+
+                console.log(err);
+
+            } finally {
+
+                setIsLoading(false);
+               
+            }
+
+
         }
+
+       
         
 
     };

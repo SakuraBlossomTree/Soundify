@@ -7,7 +7,7 @@ import TrackPlayer , { Capability , AppKilledPlaybackBehavior } from 'react-nati
 import App from './App';
 import {name as appName} from './app.json';
 import 'react-native-gesture-handler';
-
+import 'react-native-url-polyfill/auto';
 
 AppRegistry.registerComponent(appName, () => App);
 

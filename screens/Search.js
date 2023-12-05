@@ -3,7 +3,6 @@ import { StyleSheet, View ,Dimensions} from "react-native";
 import { IconButton, Card, Searchbar } from "react-native-paper";
 import { PipedVideoId } from "../hooks/PipedVideoId";
 import dark from '../colors'
-const YTMusic = require("ytmusic-api").default
 
 const screenwidth = Dimensions.get('window').width;
 
@@ -26,8 +25,6 @@ const Search = ({ navigation , route })  => {
     const [isLoading , setIsLoading] = useState(true);
 
     const onChangeSearch = (search) => setSearch(search); 
-
-    const ytmusic = new YTMusic();
 
     // const songUrl = "https://piped.video/results?search_query=" + search
     
@@ -58,6 +55,18 @@ const Search = ({ navigation , route })  => {
     const rf4opiped = "https://pipedapi.r4fo.com"
 
     const kavinrockspiped = "https://pipedapi.kavin.rocks"
+
+    const ggtylerpiped = "https://piapi.ggtyler.dev"
+
+    const seitanpiped = "https://piped-backend.seitan-ayoub.lol";
+
+    const adminforgepiped = "https://pipedapi.adminforge.de";
+
+    const smnzpiped = "https://pipedapi.smnz.de";
+
+    const projectfrpiped = "https://api.piped.projectsegfau.lt"
+
+    const privacypiped = "https://api.piped.privacydev.net"
 
     const jiosaavan = "https://saavn.me"
 
@@ -140,6 +149,42 @@ const Search = ({ navigation , route })  => {
     else if (value === "yt.music"){
 
         selectedurl = ytmusicurl;
+
+    }
+
+    else if (value === "ggtyler.dev"){
+
+        selectedurl = ggtylerpiped;
+
+    }
+
+    else if (value === "seitan-ayoub.lol"){
+
+        selectedurl = seitanpiped;
+
+    }
+
+    else if (value === "adminforge.de"){
+
+        selectedurl = adminforgepiped;
+
+    }
+
+    else if (value === "smnz.de"){
+
+        selectedurl = smnzpiped;
+
+    }
+
+    else if (value === "projectsegfau.lt"){
+
+        selectedurl = projectfrpiped;
+
+    }
+
+    else if (value === "privacydev.net"){
+
+        selectedurl = privacypiped;
 
     }
 

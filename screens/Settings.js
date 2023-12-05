@@ -30,6 +30,12 @@ const Settings = ({ navigation }) => {
         { label: 'projectsegfau.lt-in', value: 'projectsegfau.lt-in'},
         { label: 'r4fo.com', value: 'r4fo.com'},
         { label: 'kavin.rocks', value: 'kavin.rocks'},
+        { label: 'ggtyler.dev', value: 'ggtyler.dev'},
+        { label: 'seitan-ayoub.lol', value: 'seitan-ayoub.lol'},
+        { label: 'adminforge.de', value: 'adminforge.de'},
+        { label: 'smnz.de', value: 'smnz.de'},
+        { label: 'projectsegfau.lt', value: 'projectsegfau.lt'},
+        { label: 'privacydev.net', value: 'privacydev.net'},
         { label: 'JioSaavan', value: 'saavn.me'},
     ]);
   

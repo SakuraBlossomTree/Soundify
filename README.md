@@ -16,6 +16,7 @@
 
 <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/SakuraBlossomTree/Soundify">
 </div>
+
 [![Star History Chart](https://api.star-history.com/svg?repos=SakuraBlossomTree/Soundify&type=Date)](https://star-history.com/#SakuraBlossomTree/Soundify&Date)
 
 ## Description

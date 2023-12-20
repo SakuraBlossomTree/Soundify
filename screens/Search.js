@@ -254,7 +254,7 @@ const Search = ({ navigation , route })  => {
 
                 const newsearch = newsearch ? search.replace(/ /g , '+') : search; 
 
-                console.log(search);
+                // console.log(search);
 
                 const url = /* "https://pipedapi-libre.kavin.rocks"  */selectedurl + `/search?q=${newsearch}&filter=all`;
 
@@ -340,7 +340,7 @@ const Search = ({ navigation , route })  => {
 
         <View style={{flex:1, backgroundColor: dark.dark.themeColor}}>
 
-           <View>
+           <View style={{margin:10}}>
 
                 <Searchbar 
                            
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        width: screenwidth - 20,
+        width: screenwidth - 30,
     },
     cardContent: {
         flexDirection: 'row',

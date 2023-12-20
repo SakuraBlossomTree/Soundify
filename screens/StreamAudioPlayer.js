@@ -5,6 +5,7 @@ import TrackPlayer , { useProgress , RepeatMode, usePlaybackState , State, usePl
 // import SoundPlayer from 'react-native-sound-player';
 import dark from "../colors"
 import { IconButton ,Card , Modal, Portal , Button , PaperProvider} from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StreamAudioPlayer = ({ route }) => {
     
@@ -14,12 +15,6 @@ const StreamAudioPlayer = ({ route }) => {
     
     const [visible, setVisible] = useState(false);
 
-    const [selectedPlaylist, setSelectedPlaylist] = useState(null);
-
-    const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
-    const containerStyle = {backgroundColor: 'black', padding: 20}
-
     const [repeatMode , setRepeatMode] = useState(false);
 
     const [queue, setQueue] = useState([]);
@@ -28,7 +23,7 @@ const StreamAudioPlayer = ({ route }) => {
 
     const [printrepeatmode , setPrintRepeatMode] = useState("OFF");
     
-    const { position, buffered, duration } = useProgress();
+    const { position, buffered, duration } = useProgress(0);
 
     const [seekPosition , setSeekPosition] = useState(0);
 
@@ -221,9 +216,15 @@ const StreamAudioPlayer = ({ route }) => {
 
     }
 
-    const saveToPlaylist = () => {
+    const formatTime = (seconds) => {
 
-        console.log("Saving to Playlist");
+        const minutes = Math.floor(seconds / 60);
+
+        const remainingSeconds = Math.floor(seconds % 60);
+
+        const formattedTime = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        
+        return formattedTime;
 
     }
 
@@ -237,7 +238,7 @@ const StreamAudioPlayer = ({ route }) => {
         <PaperProvider>
             <View style={[{flex:1},isDarkTheme ? {backgroundColor: dark.dark.themeColor} : {backgroundColor: 'white'}]}>
 
-                <View style={{ flex: 1, alignItems: 'center'}}>
+                <View style={{ flex: 1, alignItems: 'center' , padding: 20}}>
 
                     {isLoading ? (
                         <ActivityIndicator size="large" />
@@ -245,23 +246,19 @@ const StreamAudioPlayer = ({ route }) => {
 
                         <>
                             
-                            <Card>
-                                <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 200, height:200}}/>
+                            <Card style={{margin:10}}>
+                                <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 300, height:300}}/>
                             </Card>
                             
                             <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentTrackId}</Text>
 
                             <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentArtistName}</Text>
                             
-                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{position} seconds out of {duration} total</Text>
-                    
-                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>buffer: {buffered} seconds buffered out of {duration} total</Text>
-
                             <Text style={{ color: 'white'}}>Next Song: {nextTrack}</Text>
                             
                             <Silder 
                                 
-                                style={{ width: 400 , height: 60 }}
+                                style={{ width: 400 , height: 40 }}
                                 minimumValue={0}
                                 maximumValue={duration}
                                 value={position}
@@ -275,7 +272,11 @@ const StreamAudioPlayer = ({ route }) => {
 
 
                             />
-                            
+                             
+                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{formatTime(position)} seconds out of {formatTime(duration)} total</Text>
+                    
+                            <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>buffer: {formatTime(buffered)} seconds buffered out of {formatTime(duration)} total</Text>
+
                             <View style={styles.container}>
 
                                 <View style={styles.playcontrols}>
@@ -287,7 +288,7 @@ const StreamAudioPlayer = ({ route }) => {
                                             mode='contained'
 
                                     />
-
+                                    
                                     <IconButton 
                                    
                                         mode='contained'
@@ -338,13 +339,6 @@ const StreamAudioPlayer = ({ route }) => {
 
                     )}
                     
-                        <Portal>
-                            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                                <Text>These are your playlists.</Text>
-                                <Text></Text>
-                            </Modal>
-                        </Portal>
-                   
                 </View>
             </View>
         </PaperProvider>        
@@ -356,7 +350,8 @@ const styles = StyleSheet.create({
 
     container: {
 
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        margin:10
 
     },
        
@@ -364,7 +359,7 @@ const styles = StyleSheet.create({
 
         flexDirection: 'row',
         justifyContent: 'space-between',
-        gap: 5 
+        gap: 10 
 
     }
 

@@ -1,5 +1,5 @@
 # Soundify
-
+<div align="center">
 <img alt="GitHub last commit (by committer)" src="https://img.shields.io/github/last-commit/SakuraBlossomTree/Soundify">
 
 <img alt="GitHub Release Date - Published_At" src="https://img.shields.io/github/release-date/SakuraBlossomTree/Soundify">
@@ -15,7 +15,7 @@
 <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/SakuraBlossomTree/Soundify">
 
 <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/SakuraBlossomTree/Soundify">
-
+</div>
 [![Star History Chart](https://api.star-history.com/svg?repos=SakuraBlossomTree/Soundify&type=Date)](https://star-history.com/#SakuraBlossomTree/Soundify&Date)
 
 ## Description

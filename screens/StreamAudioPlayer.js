@@ -15,7 +15,7 @@ const StreamAudioPlayer = ({ route }) => {
     
     const [visible, setVisible] = useState(false);
 
-    const [repeatMode , setRepeatMode] = useState(false);
+    const [repeatMode , setRepeatMode] = useState(1);
 
     const [queue, setQueue] = useState([]);
 
@@ -78,7 +78,6 @@ const StreamAudioPlayer = ({ route }) => {
             setIsPlaying(false);
 
         }
-
 
    }, [playbackState])
 
@@ -162,22 +161,32 @@ const StreamAudioPlayer = ({ route }) => {
 
         let newprintrepeatmode;
        
-        if (!repeatMode){
+        if (repeatMode === 1){
 
             newprintrepeatmode = "ON"
             
             await TrackPlayer.setRepeatMode(RepeatMode.Track);
 
-            setRepeatMode(true);
+            setRepeatMode(2);
 
         }
+        else if(repeatMode === 2){
+
+            newprintrepeatmode = "ON"
+
+            await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+
+            setRepeatMode(3)
+
+        }
+
         else{
 
             newprintrepeatmode = "OFF"
 
             await TrackPlayer.setRepeatMode(RepeatMode.Off);
 
-            setRepeatMode(false);
+            setRepeatMode(1);
 
         }
 
@@ -228,11 +237,31 @@ const StreamAudioPlayer = ({ route }) => {
 
     }
 
-    useEffect(() => {
+    const onTrackChange = async () => {
 
-            console.log(route.params);
+                const trackname = await TrackPlayer.getActiveTrack();
 
-    }, [route.params])
+                // console.log(trackname);
+
+                setCurrentTrackId(trackname?.title);
+          
+                setCurrentArtistName(trackname?.artist);
+
+                setCurrentSongArtwork(trackname?.artwork);
+
+                const currenttrackplaying = await TrackPlayer.getActiveTrackIndex(); 
+
+                const nexttrack = await TrackPlayer.getTrack(currenttrackplaying+1);
+         
+                // console.log(await TrackPlayer.getTrack(currentId-1));
+
+                // console.log(currentId);
+
+                // console.log(nexttrack?.title);
+
+                setNextTrack(nexttrack?.title);
+
+    } 
 
     return (
         <PaperProvider>
@@ -247,7 +276,7 @@ const StreamAudioPlayer = ({ route }) => {
                         <>
                             
                             <Card style={{margin:10}}>
-                                <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 300, height:300}}/>
+                                <Card.Cover source={{ uri : currentSongArtwork}} style={{width: 300, height:300}} />
                             </Card>
                             
                             <Text style={[{fontSize:15},isDarkTheme ? { color: 'white' }:{color:'white'}]}>{currentTrackId}</Text>
@@ -319,13 +348,13 @@ const StreamAudioPlayer = ({ route }) => {
                             
                                     />
                                     
-                                    <IconButton 
-
+                                   <IconButton 
+                                       
                                         mode='contained'
-                                        icon={repeatMode ? ('repeat-once'):('repeat')}
-                                        onPress={()=> toggleRepeatMode()}        
-                                
-                                    />
+                                        icon={repeatMode === 1 ? 'repeat-off' : (repeatMode === 2 ? 'repeat-once' : 'repeat')}
+                                        onPress={() => toggleRepeatMode()}        
+                                    
+                                    /> 
                                 
                                 </View>
                                 
